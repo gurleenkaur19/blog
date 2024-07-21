@@ -1,8 +1,22 @@
-export const dynamic = "force-dynamic";
+import prisma from "@/lib/prisma";
 
-export default function DELETE(req:Request){
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  // Get id from params
+  try {
+    await prisma.post.delete({
+      where: { id: parseInt(params.id) },
+    });
     return Response.json({
-        success: true,
-        data: []
-    })
+      success: true,
+      message: "Post deleted successfully",
+    });
+  } catch (error) {
+    return Response.json({
+      success: false,
+      message: error,
+    });
+  }
 }
