@@ -31,10 +31,21 @@ const BlogList = () => {
 
   useEffect(() => {
     const apiCall = async () => {
-      const res = await fetch("/backend/posts");
-      const data: ResponseType = await res.json();
-      if (data.success) setPosts(data.data);
-      else console.log(data.message);
+      try {
+        const res = await fetch("/backend/posts");
+        if (!res.ok) {
+          console.error("Failed to fetch posts:", res.statusText);
+          return;
+        }
+        const data: ResponseType = await res.json();
+        if (data.success) {
+          setPosts(data.data);
+        } else {
+          console.log(data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
     };
     apiCall();
   }, []);
@@ -44,21 +55,25 @@ const BlogList = () => {
       <Head>
         <title>Blog List</title>
       </Head>
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center my-8">
-          <h1 className="text-4xl font-bold text-center">Blog List</h1>
-          <button
-            onClick={() => router.push("/create")} // Adjust the route as needed
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Create New Post
-          </button>
-        </div>
-        <div className="space-y-6">
-          {posts.map((post) => (
-            <BlogCard key={post.id} post={post} onDelete={handleDelete} />
-          ))}
-        </div>
+      <div className="bg-gray-50 min-h-screen">
+        <header className="bg-white shadow-lg">
+          <div className="container mx-auto flex justify-between items-center py-4 px-6">
+            <h1 className="text-3xl font-semibold text-gray-800">Blog List</h1>
+            <button
+              onClick={() => router.push("/create")}
+              className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+            >
+              Create New Post
+            </button>
+          </div>
+        </header>
+        <main className="container mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post) => (
+              <BlogCard key={post.id} post={post} onDelete={handleDelete} />
+            ))}
+          </div>
+        </main>
       </div>
     </>
   );
