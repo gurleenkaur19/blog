@@ -5,10 +5,14 @@ import Head from "next/head";
 import { BlogPostCardType, ResponseType } from "@/lib/types";
 import { BlogCard } from "@/components/custom/BlogCard";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 const BlogList = () => {
   const [posts, setPosts] = useState<BlogPostCardType[]>([]);
   const router = useRouter();
+
+  const { user, logout } = useAuth();
 
   const handleDelete = async (id: number) => {
     try {
@@ -59,12 +63,31 @@ const BlogList = () => {
         <header className="bg-white shadow-lg">
           <div className="container mx-auto flex justify-between items-center py-4 px-6">
             <h1 className="text-3xl font-semibold text-gray-800">Blog List</h1>
-            <button
-              onClick={() => router.push("/create")}
-              className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
-            >
-              Create New Post
-            </button>
+            <nav>
+              {user ? (
+                <div className="flex items-center">
+                  <Link
+                    href="/create"
+                    className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+                  >
+                    Create New Post
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="px-5 ml-2 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300"
+                >
+                  Log In
+                </Link>
+              )}
+            </nav>
           </div>
         </header>
         <main className="container mx-auto px-6 py-8">

@@ -11,3 +11,8 @@ export interface BlogPostCardType{
     content: string;
     createdAt: string;
 }
+export interface UserType {
+    id: number;
+    name: string;
+    email: string;
+  }
