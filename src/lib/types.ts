@@ -1,18 +1,17 @@
-export interface ResponseType{
-    success: boolean;
-    data?: any;
-    message?: string;
+export interface UserType {
+  id: string;
+  name: string;
+  email: string;
 }
 
-export interface BlogPostCardType{
-    id: number;
-    title: string;
-    except: string;
-    content: string;
-    createdAt: string;
-}
-export interface UserType {
-    id: number;
-    name: string;
-    email: string;
-  }
+export type PostType = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  content: string | null;
+  published: boolean;
+  viewCount: number;
+  authorId: string;
+  author: UserType;
+};
